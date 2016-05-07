@@ -21,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ImageObserver;
 import java.awt.image.RenderedImage;
+import java.awt.image.WritableRaster;
 import java.awt.image.renderable.RenderableImage;
 import java.text.AttributedCharacterIterator;
 import java.util.Map;
@@ -56,6 +57,18 @@ public class FlipdotGraphics extends Graphics2D {
 	
 	public void fillLogo2() {
 		new FlipdotDisplayUtil(display).fill(FlipdotDisplayUtil.FILL_LOGO2);
+	}
+	
+	public void invert() {
+		WritableRaster r = display.bufferedImage.getRaster();
+		byte[] buf = new byte[1];
+		for (int x = 0; x < r.getWidth(); x++) {
+			for (int y = 0; y < r.getHeight(); y++) {
+				r.getDataElements(x, y, buf);
+				buf[0] = (byte) (1-buf[0]);
+				r.setDataElements(x, y, buf);
+			}
+		}
 	}
 	
 	// extended from java.awt.Graphics2D
