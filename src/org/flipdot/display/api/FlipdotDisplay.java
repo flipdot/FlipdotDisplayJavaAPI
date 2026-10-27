@@ -79,8 +79,10 @@ public class FlipdotDisplay {
 		byte[] data = new byte[bytesPerCol * width], buf = new byte[1];
 		for (int x = 0; x < r.getWidth(); x++) {
 			for (int y = 0; y < r.getHeight(); y++) {
-				data[bytesPerCol * x + y / 8] += ((byte[]) r.getDataElements(mirrorX ? width - 1 - x : x,
+				int idx = bytesPerCol * x + y / 8;
+				int bit = ((byte[]) r.getDataElements(mirrorX ? width - 1 - x : x,
 						mirrorY ? height - 1 - y : y, buf))[0] << (7 - (y % 8));
+				data[idx] = (byte) (data[idx] + bit);
 			}
 		}
 		return new DatagramPacket(data, data.length);
